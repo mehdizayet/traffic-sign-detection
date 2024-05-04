@@ -26,10 +26,11 @@ def main() :
 
         # READ IMAGE
         success, imgOrignal = cap.read()
-        
+
         # PROCESS IMAGE
         img = np.asarray(imgOrignal)
-        img = cv2.resize(img, (32, 32))
+        print(img.shape)
+        img = cv2.resize(src=img,dsize= (32, 32))
         img = preprocessing(img)
         cv2.imshow("Processed Image", img)
         img = img.reshape(1, 32, 32, 1)
@@ -37,7 +38,8 @@ def main() :
         cv2.putText(imgOrignal, "PROBABILITY: ", (20, 75), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
         # PREDICT IMAGE
         predictions = model.predict(img)
-        classIndex = model.predict_classes(img)
+        classIndex  = predictions.argmax(axis=-1)[0]
+        print(classIndex)
         probabilityValue =np.amax(predictions)
         if probabilityValue > threshold:
             #print(getCalssName(classIndex))
